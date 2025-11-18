@@ -1,16 +1,13 @@
 import { GoogleGenAI } from "@google/genai";
-import dotenv from "dotenv";
 import { allDefinitions as calendarDefinitions } from "./tools/calendar.js";
 import { allDefinitions as emailDefinitions } from "./tools/email.js";
 import readline from "readline";
-
-dotenv.config();
 
 const allDefinitions = calendarDefinitions.concat(emailDefinitions);
 const allDeclarations = allDefinitions.map(def => def.declaration);
 const allFunctions = Object.fromEntries(allDefinitions.map(def => [def.declaration.name, def.function]));
 
-const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENAI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const contents = [];
 
@@ -30,7 +27,7 @@ while (true) {
     });
 
     var response = await ai.models.generateContent({
-        model: "gemini-2.5-pro",
+        model: "gemini-2.5-flash",
         contents: contents,
         config: {
             tools: [
@@ -69,7 +66,7 @@ while (true) {
 
 
         response = await ai.models.generateContent({
-            model: "gemini-2.5-pro",
+            model: "gemini-2.5-flash",
             contents: contents,
             config: {
                 tools: [
